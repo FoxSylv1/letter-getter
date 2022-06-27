@@ -1,13 +1,20 @@
+import {useState} from 'react';
+import Board from './Board';
 import './LetterGetter.scss';
 
 function LetterGetter() {
+    var [board, setBoard] = useState(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]);
+
     return (
         <div id="LetterGetter">
-            <p>
-                This is a work in progress!
-                <br />
-                Please come back later!
-            </p>
+            <div id="title-container">
+                <h1>
+                    Letter Getter
+                </h1>
+            </div>
+            <div id="board-container">
+                <Board board={board}/>
+            </div>
         </div>
     );
 }

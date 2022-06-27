@@ -1,0 +1,10 @@
+@import "_sass/_tile-variables";
+
+#board {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+
+    width: calc(8 * #{$tile-margin} + 8 * #{$tile-border-width} + 4 * #{$tile-width});
+}
