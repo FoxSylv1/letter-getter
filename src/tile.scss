@@ -19,6 +19,8 @@
     transition-duration: 0.1s;
     &:hover {
         background-color: inherit;
-        color: $beige
+        color: $beige;
+
+        box-shadow: 0 0 $tile-shadow-blur-radius $tile-shadow-spread-radius $tile-shadow-color;
     }
 }
