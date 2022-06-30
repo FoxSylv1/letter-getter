@@ -1,10 +1,8 @@
-import {useState} from 'react';
 import Board from './Board';
 import './LetterGetter.scss';
 
-function LetterGetter() {
-    var [board, setBoard] = useState(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]);
 
+function LetterGetter() {
     return (
         <div id="LetterGetter">
             <div id="title-container">
@@ -13,7 +11,7 @@ function LetterGetter() {
                 </h1>
             </div>
             <div id="board-container">
-                <Board board={board} name="main" />
+                <Board name="main" />
             </div>
         </div>
     );

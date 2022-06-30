@@ -4,23 +4,45 @@
     width: $tile-width;
     height: $tile-width;
 
-    margin: $tile-margin;
-    padding: $tile-padding;
-    border: $tile-border-width solid $tile-border-color;
-    border-radius: $tile-border-radius;
-
     display: flex;
     justify-content: center;
     align-items: center;
 
     font-size: 50px;
+    font-family: "Lato", sans-serif;
+}
 
-    cursor: pointer;
+
+.tile-container {
+    margin: $tile-margin;
+    position: relative;
+
+    border: $tile-border-width solid $tile-border-color;
+    border-radius: $tile-border-radius;
+
     transition-duration: 0.1s;
     &:hover {
-        background-color: inherit;
-        color: $beige;
-
         box-shadow: 0 0 $tile-shadow-blur-radius $tile-shadow-spread-radius $tile-shadow-color;
     }
+}
+
+.used-tile {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 9;
+
+    cursor: not-allowed;
+
+    background-color: inherit;
+    color: $beige;
+}
+
+.unused-tile {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 10;
+
+    cursor: pointer;
 }
