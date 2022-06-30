@@ -7,10 +7,11 @@ function tileId(name, index) {
     return name.toString() + index.toString();
 }
 
-function handleTileSubmit(index, currentIsTileUsed, setIsTileUsed) {
+function handleTileSubmit(index, currentIsTileUsed, setIsTileUsed, passSubmitUp) {
     var newIsTileUsed = currentIsTileUsed.slice();
     newIsTileUsed[index] = true;
     setIsTileUsed(newIsTileUsed);
+    passSubmitUp();
 }
 
 function Board(props) {
@@ -24,7 +25,7 @@ function Board(props) {
                       id={tileId(props.name, index)}
                       value={tileData}
                       tileUsed={isTileUsed[index]}
-                      submitTile={() => handleTileSubmit(index, isTileUsed, setIsTileUsed)} />
+                      submitTile={() => handleTileSubmit(index, isTileUsed, setIsTileUsed, props.submitTile(tileData))} />
             )}
         </div>
     );
