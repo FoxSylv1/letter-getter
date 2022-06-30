@@ -1,4 +1,4 @@
-import "./tile.scss"
+import "./Tile.scss"
 
 /* Tile operates by having two "tiles," one for being in a state of on or off.
 The "front" tile is the black on white background and is the starting, unused

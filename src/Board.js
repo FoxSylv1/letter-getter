@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Tile from './Tile';
-import './board.scss'
+import './Board.scss'
 
 
 function tileId(name, index) {
