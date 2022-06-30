@@ -13,7 +13,7 @@ function LetterGetter() {
                 </h1>
             </div>
             <div id="board-container">
-                <Board board={board}/>
+                <Board board={board} name="main" />
             </div>
         </div>
     );
