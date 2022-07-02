@@ -25,7 +25,7 @@ function Board(props) {
                       id={tileId(props.name, index)}
                       value={tileData}
                       tileUsed={isTileUsed[index]}
-                      submitTile={() => handleTileSubmit(index, isTileUsed, setIsTileUsed, props.submitTile(tileData))} />
+                      submitTile={() => handleTileSubmit(index, isTileUsed, setIsTileUsed, () => props.submitTile(tileData))} />
             )}
         </div>
     );

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Board from './Board';
 import './LetterGetter.scss';
+import { dictionary } from './dictionary.js';
 
 
 function LetterGetter() {
@@ -19,7 +20,7 @@ function LetterGetter() {
                 />
             </div>
             <div>
-                <h2 id={(currentSubmission === "polka") ? "valid-word" : "invalid-word"}>
+                <h2 id={dictionary.includes(currentSubmission.toLowerCase()) ? "valid-word" : "invalid-word"}>
                     {currentSubmission}
                 </h2>
             </div>
