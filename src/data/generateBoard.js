@@ -42,8 +42,6 @@ function isLegalBoard(board) {
     board.forEach((tile) => ++tileCounts[tile]);
     
     for (var tileinfo of tileData) {
-        console.log(tileinfo.value);
-        console.log(tileCounts[tileinfo.value]);
         if (tileCounts[tileinfo.value] > tileinfo.maxNum) {
             return false;
         }
