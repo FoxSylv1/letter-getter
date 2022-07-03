@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Board from './Board';
 import { dictionary } from '../data/dictionary.js';
 import BoardManager from './BoardManager';
+import { generateBoard } from '../data/generateBoard.js';
 import './LetterGetter.scss';
 
 function submitTile(tileData, index, isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission) {
@@ -34,7 +35,7 @@ function LetterGetter() {
     var [currentSubmission, setCurrentSubmission] = useState("");
     var [submissionList, setSubmissionList] = useState([]);
     var [isTileUsed, setIsTileUsed] = useState(new Array(DEFAULT_BOARD_SIZE).fill(false));
-    var [board, setBoard] = useState(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]);
+    var [board, setBoard] = useState(generateBoard());
 
 
     return (
@@ -59,7 +60,7 @@ function LetterGetter() {
             <div id="board-management-container">
                <BoardManager resetSubmission={() => resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission)}
                              submitSubmission={() => submitSubmission(isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList)}
-                             scrambleBoard={() => fullResetBoard(["WIP"], setBoard, isTileUsed, setIsTileUsed, setCurrentSubmission)}/> 
+                             scrambleBoard={() => fullResetBoard(generateBoard(), setBoard, isTileUsed, setIsTileUsed, setCurrentSubmission)}/> 
             </div>
         </div>
     );
