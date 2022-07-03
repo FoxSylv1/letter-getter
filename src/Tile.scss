@@ -13,19 +13,6 @@
 }
 
 
-.tile-container {
-    margin: $tile-margin;
-    position: relative;
-
-    border: $tile-border-width solid $tile-border-color;
-    border-radius: $tile-border-radius;
-
-    transition-duration: 0.1s;
-    &:hover {
-        box-shadow: 0 0 $tile-shadow-blur-radius $tile-shadow-spread-radius $tile-shadow-color;
-    }
-}
-
 .used-tile {
     position: absolute;
     top: 0;

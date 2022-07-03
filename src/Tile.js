@@ -21,7 +21,7 @@ function Tile(props) {
     );
 
     return (
-        <div class="tile-container tile">
+        <div class="clickable-button tile">
             {tileData}
         </div>
     );
