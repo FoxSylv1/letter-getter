@@ -11,16 +11,28 @@ function submitTile(tileData, index, isTileUsed, setIsTileUsed, currentSubmissio
     setCurrentSubmission(currentSubmission + tileData);
 }
 
+function fullResetBoard(board, setBoard, isTileUsed, setIsTileUsed, setCurrentSubmission) {
+    setBoard(board);
+    resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission);
+}
+
+
 function resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission) {
     setIsTileUsed(new Array(isTileUsed.length).fill(false));
     setCurrentSubmission("");
 }
+function submitSubmission(isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
+    setSubmissionList(submissionList.concat(currentSubmission));
+    resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission);
+}
+
 
 
 function LetterGetter() {
     const DEFAULT_BOARD_SIZE = 16;
 
     var [currentSubmission, setCurrentSubmission] = useState("");
+    var [submissionList, setSubmissionList] = useState([]);
     var [isTileUsed, setIsTileUsed] = useState(new Array(DEFAULT_BOARD_SIZE).fill(false));
     var [board, setBoard] = useState(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P"]);
 
@@ -46,7 +58,8 @@ function LetterGetter() {
             </div>
             <div id="board-management-container">
                <BoardManager resetSubmission={() => resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission)}
-                              setBoard={(board) => setBoard(board)}/> 
+                             submitSubmission={() => submitSubmission(isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList)}
+                             scrambleBoard={() => fullResetBoard(["WIP"], setBoard, isTileUsed, setIsTileUsed, setCurrentSubmission)}/> 
             </div>
         </div>
     );
