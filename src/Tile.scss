@@ -4,6 +4,8 @@
     width: $tile-width;
     height: $tile-width;
 
+    border-radius: $tile-border-radius;
+
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +19,6 @@
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 9;
 
     cursor: not-allowed;
 
@@ -29,7 +30,6 @@
     position: absolute;
     top: 0;
     right: 0;
-    z-index: 10;
 
     cursor: pointer;
 }
