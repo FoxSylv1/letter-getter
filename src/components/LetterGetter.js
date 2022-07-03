@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Board from './Board';
-import { dictionary } from './dictionary.js';
+import { dictionary } from '../data/dictionary.js';
 import BoardManager from './BoardManager';
 import './LetterGetter.scss';
 
