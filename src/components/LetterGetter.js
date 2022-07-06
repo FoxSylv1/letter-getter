@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Board from './Board';
 import { dictionary } from '../data/dictionary.js';
 import BoardManager from './BoardManager';
-import { generateBoard } from '../data/generateBoard.js';
+import { generateBoard } from '../utilities/generateBoard.js';
 import './LetterGetter.scss';
 
 function submitTile(tileData, index, isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission) {
