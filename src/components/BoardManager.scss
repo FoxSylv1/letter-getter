@@ -1,6 +1,6 @@
 
 .control-button {
-    width: 30%;
+    width: unquote("min(30%, 220px)");
     height: 3rem;
 
     font-size: 2rem;

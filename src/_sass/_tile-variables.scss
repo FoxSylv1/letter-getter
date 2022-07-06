@@ -2,7 +2,7 @@
 
 $tile-margin: 5px;
 $tile-padding: 0px;
-$tile-width: 115px;
+$tile-width: unquote("min(18vw, 115px)");
 
 $tile-border-width: 2px;
 $tile-border-color: $blue;
