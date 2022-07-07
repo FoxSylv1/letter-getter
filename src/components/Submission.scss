@@ -1,0 +1,21 @@
+.submission {
+    font-size: 2.3rem;
+
+    border: 0.5px solid rgba(100,70,30,10);
+    border-radius: 3px;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+@media (max-width: 600px) {
+    .submission {
+        font-size: 1.4rem;
+    }
+}
+
+.submission-word {
+    float: left;
+}
+.submission-score {
+    float: right;
+}

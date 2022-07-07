@@ -3,7 +3,9 @@ import Title from './Title';
 import Board from './Board';
 import CurrentSubmission from './CurrentSubmission';
 import BoardManager from './BoardManager';
+import SubmissionList from './SubmissionList';
 import { generateBoard } from '../utilities/generateBoard.js';
+import { dictionary } from '../data/dictionary.js';
 import './LetterGetter.scss';
 
 function submitTile(tileIndex, currentSubmission, setCurrentSubmission) {
@@ -15,9 +17,10 @@ function undoTile(currentSubmission, setCurrentSubmission) {
     setCurrentSubmission(currentSubmission.slice(0, -1));
 }
 
-function resetBoard(board, setBoard, setCurrentSubmission) {
+function resetBoard(board, setBoard, setCurrentSubmission, setSubmissionList) {
     setBoard(board);
     setCurrentSubmission([]);
+    setSubmissionList([]);
 }
 
 function submissionToString(board, currentSubmission) {
@@ -25,8 +28,11 @@ function submissionToString(board, currentSubmission) {
     currentSubmission.forEach((tileIndex) => string += board[tileIndex]);
     return string;
 }
-function submitSubmission(currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
-    setSubmissionList(submissionList.concat(currentSubmission));
+function submitSubmission(board, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
+    var newSubmission = {word: submissionToString(board, currentSubmission), score: 9999};
+    if (!submissionList.map((submission) => submission.word).includes(newSubmission.word)) {
+        setSubmissionList(submissionList.concat(newSubmission));
+    }
     setCurrentSubmission([]);
 }
 
@@ -58,8 +64,11 @@ function LetterGetter() {
             </div>
             <div id="board-management-container">
                <BoardManager undoTile={() => undoTile(currentSubmission, setCurrentSubmission)}
-                             submitSubmission={() => submitSubmission(currentSubmission, setCurrentSubmission, submissionList, setSubmissionList)}
-                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentSubmission)}/> 
+                             submitSubmission={() => submitSubmission(board, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList)}
+                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentSubmission, setSubmissionList)}/> 
+            </div>
+            <div id="submission-list-container">
+                <SubmissionList submissionList={submissionList} />
             </div>
         </div>
     );
