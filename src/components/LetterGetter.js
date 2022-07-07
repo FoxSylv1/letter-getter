@@ -33,12 +33,9 @@ function submitSubmission(currentSubmission, setCurrentSubmission, submissionLis
 
 
 function LetterGetter() {
-    const DEFAULT_BOARD_SIZE = 16;
-
     var [currentSubmission, setCurrentSubmission] = useState([]);
     var [submissionList, setSubmissionList] = useState([]);
     var [board, setBoard] = useState(generateBoard());
-
 
     return (
         <div id="LetterGetter">
