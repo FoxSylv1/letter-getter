@@ -1,5 +1,5 @@
 import Tile from './Tile';
-import './Board.scss'
+import './Board.scss';
 
 
 function tileId(name, tileIndex) {

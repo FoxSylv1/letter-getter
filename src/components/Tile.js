@@ -1,4 +1,4 @@
-import "./Tile.scss"
+import './Tile.scss';
 
 function clickTile(currentSubmission, tileIndex, submitTile) {
     if (!currentSubmission.includes(tileIndex)) {
