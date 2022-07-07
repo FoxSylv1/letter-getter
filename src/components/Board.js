@@ -2,19 +2,20 @@ import Tile from './Tile';
 import './Board.scss'
 
 
-function tileId(name, index) {
-    return name.toString() + index.toString();
+function tileId(name, tileIndex) {
+    return name.toString() + tileIndex.toString();
 }
 
 function Board(props) {
     return (
         <div id="board">
-            {props.board.map((tileData, index) => 
-                <Tile key={tileId(props.name, index)}
-                      id={tileId(props.name, index)}
+            {props.board.map((tileData, tileIndex) => 
+                <Tile key={tileId(props.name, tileIndex)}
+                      id={tileId(props.name, tileIndex)}
+                      currentSubmission={props.currentSubmission}
                       value={tileData}
-                      tileUsed={props.isTileUsed[index]}
-                      submitTile={() => props.submitTile(tileData, index)} />
+                      tileIndex={tileIndex}
+                      submitTile={() => props.submitTile(tileIndex)} />
             )}
         </div>
     );

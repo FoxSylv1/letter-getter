@@ -1,7 +1,7 @@
 import "./Tile.scss"
 
-function clickTile(tileUsed, submitTile) {
-    if (!tileUsed) {
+function clickTile(currentSubmission, tileIndex, submitTile) {
+    if (!currentSubmission.includes(tileIndex)) {
         submitTile();
     }
 }
@@ -9,8 +9,8 @@ function clickTile(tileUsed, submitTile) {
 function Tile(props) {
     return (
         <div class="clickable-button tile">
-            <button class={"tile " + (props.tileUsed ? "used-tile" : "unused-tile")}
-                    onClick={() => clickTile(props.tileUsed, props.submitTile)}>
+            <button class={"tile " + (props.currentSubmission.includes(props.tileIndex) ? "used-tile" : "unused-tile")}
+                    onClick={() => clickTile(props.currentSubmission, props.tileIndex, props.submitTile)}>
                 {props.value}
             </button>
         </div>

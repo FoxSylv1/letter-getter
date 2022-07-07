@@ -5,26 +5,28 @@ import BoardManager from './BoardManager';
 import { generateBoard } from '../utilities/generateBoard.js';
 import './LetterGetter.scss';
 
-function submitTile(tileData, index, isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission) {
-    var newIsTileUsed = isTileUsed.slice();
-    newIsTileUsed[index] = true;
-    setIsTileUsed(newIsTileUsed);
-    setCurrentSubmission(currentSubmission + tileData);
+function submitTile(tileIndex, currentSubmission, setCurrentSubmission) {
+    if (!currentSubmission.includes(tileIndex)) {
+        setCurrentSubmission(currentSubmission.concat(tileIndex));
+    }
+}
+function undoTile(currentSubmission, setCurrentSubmission) {
+    setCurrentSubmission(currentSubmission.slice(0, -1));
 }
 
-function fullResetBoard(board, setBoard, isTileUsed, setIsTileUsed, setCurrentSubmission) {
+function resetBoard(board, setBoard, setCurrentSubmission) {
     setBoard(board);
-    resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission);
+    setCurrentSubmission([]);
 }
 
-
-function resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission) {
-    setIsTileUsed(new Array(isTileUsed.length).fill(false));
-    setCurrentSubmission("");
+function submissionToString(board, currentSubmission) {
+    var string = "";
+    currentSubmission.forEach((tileIndex) => string += board[tileIndex]);
+    return string;
 }
-function submitSubmission(isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
+function submitSubmission(currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
     setSubmissionList(submissionList.concat(currentSubmission));
-    resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission);
+    setCurrentSubmission([]);
 }
 
 
@@ -32,9 +34,8 @@ function submitSubmission(isTileUsed, setIsTileUsed, currentSubmission, setCurre
 function LetterGetter() {
     const DEFAULT_BOARD_SIZE = 16;
 
-    var [currentSubmission, setCurrentSubmission] = useState("");
+    var [currentSubmission, setCurrentSubmission] = useState([]);
     var [submissionList, setSubmissionList] = useState([]);
-    var [isTileUsed, setIsTileUsed] = useState(new Array(DEFAULT_BOARD_SIZE).fill(false));
     var [board, setBoard] = useState(generateBoard());
 
 
@@ -48,19 +49,19 @@ function LetterGetter() {
             <div id="board-container">
                 <Board name="main"
                        board={board}
-                       isTileUsed={isTileUsed}
-                       submitTile={(tileData, index) => submitTile(tileData, index, isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission)}
+                       currentSubmission={currentSubmission}
+                       submitTile={(tileIndex) => submitTile(tileIndex, currentSubmission, setCurrentSubmission)}
                 />
             </div>
             <div id="submission-container">
-                <h2 id={dictionary.includes(currentSubmission.toLowerCase()) ? "valid-word" : "invalid-word"}>
-                    {currentSubmission}
+                <h2 id={dictionary.includes(submissionToString(board, currentSubmission).toLowerCase()) ? "valid-word" : "invalid-word"}>
+                    {submissionToString(board, currentSubmission)}
                 </h2>
             </div>
             <div id="board-management-container">
-               <BoardManager resetSubmission={() => resetSubmission(isTileUsed, setIsTileUsed, setCurrentSubmission)}
-                             submitSubmission={() => submitSubmission(isTileUsed, setIsTileUsed, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList)}
-                             scrambleBoard={() => fullResetBoard(generateBoard(), setBoard, isTileUsed, setIsTileUsed, setCurrentSubmission)}/> 
+               <BoardManager undoTile={() => undoTile(currentSubmission, setCurrentSubmission)}
+                             submitSubmission={() => submitSubmission(currentSubmission, setCurrentSubmission, submissionList, setSubmissionList)}
+                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentSubmission)}/> 
             </div>
         </div>
     );

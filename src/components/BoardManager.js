@@ -2,9 +2,9 @@ import './BoardManager.scss';
 
 function BoardManager(props) {
     return (<>
-        <button class="clickable-button control-button" onClick={() => props.resetSubmission()}>
+        <button class="clickable-button control-button" onClick={() => props.undoTile()}>
             <p>
-                Reset
+                Backspace
             </p>
         </button>
         <button class="clickable-button control-button" onClick={() => props.submitSubmission()}>
