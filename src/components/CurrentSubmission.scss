@@ -1,10 +1,12 @@
 #current-submission {
     font-size: 3.5rem;
+    height: 3.7rem;
 }
 
 @media (max-width: 600px) {
     #current-submission {
         font-size: 8vw;
+        height: 8vw;
     }
 }
 
