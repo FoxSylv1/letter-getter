@@ -30,7 +30,7 @@ function submissionToString(board, currentSubmission) {
 }
 function submitSubmission(board, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
     var newSubmission = {word: submissionToString(board, currentSubmission), score: 9999};
-    if (!submissionList.map((submission) => submission.word).includes(newSubmission.word)) {
+    if ((!submissionList.map((submission) => submission.word).includes(newSubmission.word)) && dictionary.includes(newSubmission.word.toLowerCase())) {
         setSubmissionList(submissionList.concat(newSubmission));
     }
     setCurrentSubmission([]);
