@@ -1,0 +1,17 @@
+#current-submission {
+    font-size: 3.5rem;
+}
+
+@media (max-width: 600px) {
+    #current-submission {
+        font-size: 8vw;
+    }
+}
+
+
+.valid-word {
+    color: green;
+}
+.invalid-word {
+    color: red;
+}

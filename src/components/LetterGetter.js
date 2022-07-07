@@ -1,6 +1,7 @@
 import { useState } from 'react';
+import Title from './Title';
 import Board from './Board';
-import { dictionary } from '../data/dictionary.js';
+import CurrentSubmission from './CurrentSubmission';
 import BoardManager from './BoardManager';
 import { generateBoard } from '../utilities/generateBoard.js';
 import './LetterGetter.scss';
@@ -42,9 +43,9 @@ function LetterGetter() {
     return (
         <div id="LetterGetter">
             <div id="title-container">
-                <h1>
+                <Title>
                     Letter Getter
-                </h1>
+                </Title>
             </div>
             <div id="board-container">
                 <Board name="main"
@@ -54,9 +55,9 @@ function LetterGetter() {
                 />
             </div>
             <div id="submission-container">
-                <h2 id={dictionary.includes(submissionToString(board, currentSubmission).toLowerCase()) ? "valid-word" : "invalid-word"}>
+                <CurrentSubmission>
                     {submissionToString(board, currentSubmission)}
-                </h2>
+                </CurrentSubmission>
             </div>
             <div id="board-management-container">
                <BoardManager undoTile={() => undoTile(currentSubmission, setCurrentSubmission)}
