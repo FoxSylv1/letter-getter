@@ -6,6 +6,7 @@ import BoardManager from './BoardManager';
 import SubmissionList from './SubmissionList';
 import { generateBoard } from '../utilities/generateBoard.js';
 import { dictionary } from '../data/dictionary.js';
+import { wordScore } from '../utilities/wordScore.js';
 import './LetterGetter.scss';
 
 function submitTile(tileIndex, currentSubmission, setCurrentSubmission) {
@@ -29,7 +30,8 @@ function submissionToString(board, currentSubmission) {
     return string;
 }
 function submitSubmission(board, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
-    var newSubmission = {word: submissionToString(board, currentSubmission), score: 9999};
+    var submissionString = submissionToString(board, currentSubmission);
+    var newSubmission = {word: submissionString, score: wordScore(submissionString)};
     if ((!submissionList.map((submission) => submission.word).includes(newSubmission.word)) && dictionary.includes(newSubmission.word.toLowerCase())) {
         setSubmissionList(submissionList.concat(newSubmission));
     }
