@@ -33,7 +33,8 @@ function submitSubmission(board, currentSubmission, setCurrentSubmission, submis
     var submissionString = submissionToString(board, currentSubmission);
     var newSubmission = {word: submissionString, score: wordScore(submissionString)};
     if ((!submissionList.map((submission) => submission.word).includes(newSubmission.word)) && dictionary.includes(newSubmission.word.toLowerCase())) {
-        setSubmissionList(submissionList.concat(newSubmission));
+        var newSubmissionList = submissionList.concat(newSubmission);
+        setSubmissionList(newSubmissionList.sort((s1, s2) => s2.score - s1.score));
     }
     setCurrentSubmission([]);
 }
