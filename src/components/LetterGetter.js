@@ -4,6 +4,7 @@ import Board from './Board';
 import CurrentSubmission from './CurrentSubmission';
 import BoardManager from './BoardManager';
 import SubmissionList from './SubmissionList';
+import HowTo from './HowTo';
 import { generateBoard } from '../utilities/generateBoard.js';
 import { dictionary } from '../data/dictionary.js';
 import { wordScore } from '../utilities/wordScore.js';
@@ -72,6 +73,9 @@ function LetterGetter() {
             </div>
             <div id="submission-list-container">
                 <SubmissionList submissionList={submissionList} />
+            </div>
+            <div>
+                <HowTo />
             </div>
         </div>
     );

@@ -14,4 +14,10 @@ times you would like for any given board.
 
 # Scoring
 
-[TBD]
+Score is awarded based primarily on the length of the word,
+with more points being given for harder-to-use letters and
+harder-to-use sequences of letters. There is always at least
+one 100+ score word in each rack.
+
+(although it may not be easy to find...)
+

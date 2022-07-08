@@ -1,6 +1,8 @@
 @import "../_sass/_tile-variables";
 
 #board {
+    margin: auto;
+
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
