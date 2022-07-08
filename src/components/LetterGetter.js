@@ -10,8 +10,11 @@ import { dictionary } from '../data/dictionary.js';
 import { wordScore } from '../utilities/wordScore.js';
 import './LetterGetter.scss';
 
-function submitTile(tileIndex, currentSubmission, setCurrentSubmission) {
-    if (!currentSubmission.includes(tileIndex)) {
+function clickTile(tileIndex, currentSubmission, setCurrentSubmission) {
+    if (currentSubmission.includes(tileIndex)) {
+        setCurrentSubmission(currentSubmission.slice(0, currentSubmission.indexOf(tileIndex) + 1));
+    }
+    else {
         setCurrentSubmission(currentSubmission.concat(tileIndex));
     }
 }
@@ -58,7 +61,7 @@ function LetterGetter() {
                 <Board name="main"
                        board={board}
                        currentSubmission={currentSubmission}
-                       submitTile={(tileIndex) => submitTile(tileIndex, currentSubmission, setCurrentSubmission)}
+                       clickTile={(tileIndex) => clickTile(tileIndex, currentSubmission, setCurrentSubmission)}
                 />
             </div>
             <div id="submission-container">

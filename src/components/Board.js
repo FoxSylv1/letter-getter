@@ -15,7 +15,7 @@ function Board(props) {
                       currentSubmission={props.currentSubmission}
                       value={tileData}
                       tileIndex={tileIndex}
-                      submitTile={() => props.submitTile(tileIndex)} />
+                      clickTile={() => props.clickTile(tileIndex)} />
             )}
         </div>
     );

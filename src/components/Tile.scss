@@ -12,8 +12,9 @@
 
     font-size: 4rem;
     font-family: "Lato", sans-serif;
-}
 
+    cursor: pointer;
+}
 @media (max-width: 600px) {
     .tile {
         font-size: 3rem;
@@ -26,8 +27,6 @@
     top: 0;
     right: 0;
 
-    cursor: not-allowed;
-
     background-color: inherit;
     color: $beige;
 }
@@ -36,6 +35,18 @@
     position: absolute;
     top: 0;
     right: 0;
+}
 
-    cursor: pointer;
+
+.tile-num {
+    position: absolute;
+    top: 3px;
+    right: 6px;
+
+    font-size: 1.3rem;
+}
+@media (max-width: 600px) {
+    .tile-num {
+        font-size: 1rem;
+    }
 }
