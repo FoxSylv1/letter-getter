@@ -6,6 +6,7 @@ import BoardManager from './BoardManager';
 import SubmissionList from './SubmissionList';
 import HowTo from './HowTo';
 import { generateBoard } from '../utilities/generateBoard.js';
+import { tilesToWord } from '../utilities/converters.js';
 import { dictionary } from '../data/dictionary.js';
 import { wordScore } from '../utilities/wordScore.js';
 import './LetterGetter.scss';
@@ -28,13 +29,8 @@ function resetBoard(board, setBoard, setCurrentSubmission, setSubmissionList) {
     setSubmissionList([]);
 }
 
-function submissionToString(board, currentSubmission) {
-    var string = "";
-    currentSubmission.forEach((tileIndex) => string += board[tileIndex]);
-    return string;
-}
 function submitSubmission(board, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
-    var submissionString = submissionToString(board, currentSubmission);
+    var submissionString = tilesToWord(board, currentSubmission);
     var newSubmission = {word: submissionString, score: wordScore(submissionString)};
     if ((!submissionList.map((submission) => submission.word).includes(newSubmission.word)) && dictionary.includes(newSubmission.word.toLowerCase())) {
         var newSubmissionList = submissionList.concat(newSubmission);
@@ -66,7 +62,7 @@ function LetterGetter() {
             </div>
             <div id="submission-container">
                 <CurrentSubmission>
-                    {submissionToString(board, currentSubmission)}
+                    {tilesToWord(board, currentSubmission)}
                 </CurrentSubmission>
             </div>
             <div id="board-management-container">
