@@ -12,7 +12,10 @@ import { wordScore } from '../utilities/wordScore.js';
 import './LetterGetter.scss';
 
 function clickTile(tileIndex, currentSubmission, setCurrentSubmission) {
-    if (currentSubmission.includes(tileIndex)) {
+    if (currentSubmission[currentSubmission.length - 1] === tileIndex) {
+        setCurrentSubmission(currentSubmission.slice(0, -1));
+    }
+    else if (currentSubmission.includes(tileIndex)) {
         setCurrentSubmission(currentSubmission.slice(0, currentSubmission.indexOf(tileIndex) + 1));
     }
     else {
