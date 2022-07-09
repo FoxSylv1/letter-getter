@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Title from './Title';
 import Board from './Board';
 import CurrentSubmission from './CurrentSubmission';
@@ -6,48 +6,98 @@ import BoardManager from './BoardManager';
 import SubmissionList from './SubmissionList';
 import HowTo from './HowTo';
 import { generateBoard } from '../utilities/generateBoard.js';
-import { tilesToWord } from '../utilities/converters.js';
+import { wordToTiles, tilesToWord } from '../utilities/converters.js';
 import { dictionary } from '../data/dictionary.js';
+import { validLetterKeys } from '../data/validLetterKeys.js';
 import { wordScore } from '../utilities/wordScore.js';
 import './LetterGetter.scss';
 
-function clickTile(tileIndex, currentSubmission, setCurrentSubmission) {
-    if (currentSubmission[currentSubmission.length - 1] === tileIndex) {
-        setCurrentSubmission(currentSubmission.slice(0, -1));
+/*
+Internally, the tiles used and word displayed are two differing values,
+for the primary purpose of allowing inconsistencies between them. So
+for example, it is possible to try and input a word which cannot be
+spelled on the grid, and the differing values of the tiles used and
+and the word would properly reflect that.
+
+Using updateTiles() and updateWord() to change these values instead of
+the default React set functions automatically keeps the other up-to-date.
+*/
+
+
+//Dual updaters
+function updateTiles(board, newTiles, setCurrentTiles, setCurrentWord) {
+    setCurrentTiles(newTiles);
+    setCurrentWord(tilesToWord(board, newTiles));
+}
+function updateWord(board, newWord, setCurrentWord, setCurrentTiles) {
+    setCurrentWord(newWord);
+    setCurrentTiles(wordToTiles(board, newWord));
+}
+
+//Input Handlers
+function clickTile(board, tileIndex, currentTiles, setCurrentTiles, setCurrentWord) {
+    if (currentTiles[currentTiles.length - 1] === tileIndex) {
+        updateTiles(board, currentTiles.slice(0, -1), setCurrentTiles, setCurrentWord);
     }
-    else if (currentSubmission.includes(tileIndex)) {
-        setCurrentSubmission(currentSubmission.slice(0, currentSubmission.indexOf(tileIndex) + 1));
+    else if (currentTiles.includes(tileIndex)) {
+        updateTiles(board, currentTiles.slice(0, currentTiles.indexOf(tileIndex) + 1), setCurrentTiles, setCurrentWord);
     }
     else {
-        setCurrentSubmission(currentSubmission.concat(tileIndex));
+        updateTiles(board, currentTiles.concat(tileIndex), setCurrentTiles, setCurrentWord);
     }
 }
-function undoTile(currentSubmission, setCurrentSubmission) {
-    setCurrentSubmission(currentSubmission.slice(0, -1));
+function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList) {
+    var key = rawKey.toUpperCase();
+    if (validLetterKeys.includes(key)) {
+        if (currentWord.charAt(currentWord.length - 1) === "Q" && key === "U") {
+            key = "u";
+        }
+        updateWord(board, currentWord.concat(key), setCurrentWord, setCurrentTiles);
+    }
+    else if (key === "BACKSPACE") {
+        updateWord(board, currentWord.slice(0, -1), setCurrentWord, setCurrentTiles);
+    }
+    else if (key === "ENTER" || key === " ") {
+        submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList);
+    }
+    else if (key === "CONTROL") {
+        resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+    }
 }
 
-function resetBoard(board, setBoard, setCurrentSubmission, setSubmissionList) {
+
+
+//Board Management
+function resetBoard(board, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
     setBoard(board);
-    setCurrentSubmission([]);
+    setCurrentTiles([]);
+    setCurrentWord("");
     setSubmissionList([]);
 }
-
-function submitSubmission(board, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList) {
-    var submissionString = tilesToWord(board, currentSubmission);
-    var newSubmission = {word: submissionString, score: wordScore(submissionString)};
-    if ((!submissionList.map((submission) => submission.word).includes(newSubmission.word)) && dictionary.includes(newSubmission.word.toLowerCase())) {
+function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList) {
+    var newSubmission = {word: currentWord, score: wordScore(currentWord)};
+    if ((!submissionList.map((submission) => submission.word).includes(currentWord)) && dictionary.includes(currentWord.toLowerCase()) && !currentTiles.includes(-1)) {
         var newSubmissionList = submissionList.concat(newSubmission);
         setSubmissionList(newSubmissionList.sort((s1, s2) => s2.score - s1.score));
     }
-    setCurrentSubmission([]);
+    updateWord(board, "", setCurrentWord, setCurrentTiles);
 }
 
 
 
 function LetterGetter() {
-    var [currentSubmission, setCurrentSubmission] = useState([]);
+    var [currentTiles, setCurrentTiles] = useState([]);
+    var [currentWord, setCurrentWord] = useState("");
     var [submissionList, setSubmissionList] = useState([]);
     var [board, setBoard] = useState(generateBoard());
+
+    useEffect(() => {
+        var keyHandler = (e) => pressKey(e.key, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList);
+        window.addEventListener("keydown", keyHandler, false);
+        return (() => {
+            window.removeEventListener("keydown", keyHandler, false);});
+    }, [board, currentWord, currentTiles, submissionList]);
+
 
     return (
         <div id="LetterGetter">
@@ -59,19 +109,19 @@ function LetterGetter() {
             <div id="board-container">
                 <Board name="main"
                        board={board}
-                       currentSubmission={currentSubmission}
-                       clickTile={(tileIndex) => clickTile(tileIndex, currentSubmission, setCurrentSubmission)}
+                       currentTiles={currentTiles}
+                       clickTile={(tileIndex) => clickTile(board, tileIndex, currentTiles, setCurrentTiles, setCurrentWord)}
                 />
             </div>
             <div id="submission-container">
-                <CurrentSubmission>
-                    {tilesToWord(board, currentSubmission)}
+                <CurrentSubmission currentTiles={currentTiles}>
+                    {currentWord}
                 </CurrentSubmission>
             </div>
             <div id="board-management-container">
-               <BoardManager undoTile={() => undoTile(currentSubmission, setCurrentSubmission)}
-                             submitSubmission={() => submitSubmission(board, currentSubmission, setCurrentSubmission, submissionList, setSubmissionList)}
-                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentSubmission, setSubmissionList)}/> 
+               <BoardManager undoTile={() => updateTiles(board, currentTiles.slice(0, -1), setCurrentTiles, setCurrentWord)}
+                             submitSubmission={() => submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList)}
+                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}/> 
             </div>
             <div id="submission-list-container">
                 <SubmissionList submissionList={submissionList} />

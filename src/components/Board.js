@@ -12,7 +12,7 @@ function Board(props) {
             {props.board.map((tileData, tileIndex) => 
                 <Tile key={tileId(props.name, tileIndex)}
                       id={tileId(props.name, tileIndex)}
-                      currentSubmission={props.currentSubmission}
+                      currentTiles={props.currentTiles}
                       value={tileData}
                       tileIndex={tileIndex}
                       clickTile={() => props.clickTile(tileIndex)} />
