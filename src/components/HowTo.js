@@ -25,6 +25,29 @@ function HowTo(props) {
                 <br />
                 (although it may not be easy to find...)
             </p>
+
+            <h2>
+                Keyboard Shortcuts
+            </h2>
+            <p>
+                In addition to being able to type in letters, the following
+                shortcuts are available to manage the board:
+            </p>
+            <br />
+            <p id="keyboard-shortcuts">
+                ENTER: Submit word
+                <br />
+                CAPS LOCK: Toggles practice mode
+                <br />
+                CONTROL: Scrambles the board
+                <br />
+                ESCAPE: Enters a custom board
+            </p>
+            <br />
+            <p class="how-to-text">
+                Note that these last two can only be used when in practice
+                mode, similarly to normal gameplay.
+            </p>
         </div>
     );
 }

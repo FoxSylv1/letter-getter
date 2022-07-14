@@ -47,8 +47,9 @@ function clickTile(board, tileIndex, currentTiles, setCurrentTiles, setCurrentWo
         updateTiles(board, currentTiles.concat(tileIndex), setCurrentTiles, setCurrentWord);
     }
 }
-function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, setIsDaily) {
+function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily, setIsDaily) {
     var key = rawKey.toUpperCase();
+    console.log(key);
     if (validLetterKeys.includes(key)) {
         if (currentWord.charAt(currentWord.length - 1) === "Q" && key === "U") {
             key = "u";
@@ -58,12 +59,21 @@ function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentT
     else if (key === "BACKSPACE") {
         updateWord(board, currentWord.slice(0, -1), setCurrentWord, setCurrentTiles);
     }
-    else if (key === "ENTER" || key === " ") {
+    else if (key === "ENTER") {
         submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList);
     }
     else if (key === "CONTROL") {
-        setIsDaily(false);
-        resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+        if (!isDaily) {
+            resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+        }
+    }
+    else if (key === "CAPSLOCK") {
+        switchModes(isDaily, setIsDaily, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+    }
+    else if (key === "ESCAPE") {
+        if (!isDaily) {
+            setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+        }
     }
 }
 
@@ -119,7 +129,7 @@ function LetterGetter() {
     var [isDaily, setIsDaily] = useState(true);
 
     useEffect(() => {
-        var keyHandler = (e) => pressKey(e.key, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, setIsDaily);
+        var keyHandler = (e) => pressKey(e.key, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily, setIsDaily);
         window.addEventListener("keydown", keyHandler, false);
         return (() => {
             window.removeEventListener("keydown", keyHandler, false);});
