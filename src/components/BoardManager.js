@@ -4,7 +4,7 @@ function BoardManager(props) {
     var buttonData = [
         {title: "Backspace", onClick: () => props.undoTile()},
         {title: "Submit", onClick: () => props.submitSubmission()},
-        {title: (props.isDaily ? "Practice" : "Daily"), onClick: () => props.switchModes()},
+        {title: (props.isDaily ? "Practice" : "Return"), onClick: () => props.switchModes()},
         {title: "Scramble", onClick: () => props.scrambleBoard()},
         {title: "Custom", onClick: () => props.setCustomBoard()}
     ];
