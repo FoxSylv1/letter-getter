@@ -86,7 +86,19 @@ function resetBoard(board, setBoard, setCurrentTiles, setCurrentWord, setSubmiss
     setSubmissionList([]);
 }
 function setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
-    resetBoard(["W", "I", "P"], setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+    var input = prompt("Please input your desired board:").toUpperCase();
+    if (input !== null) {
+        var newBoard = [];
+        for (var c = 0; c < input.length; ++c) {
+            var tile = input.charAt(c);
+            if (validLetterKeys.includes(tile) && !(newBoard[newBoard.length - 1] === "Qu" && tile === "U")) {
+                newBoard = newBoard.concat(tile === "Q" ? "Qu" : tile);
+            }
+        }
+        if (newBoard.length > 0) {
+            resetBoard(newBoard, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+        }
+    }
 }
 function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList) {
     var newSubmission = {word: currentWord, score: wordScore(currentWord)};
