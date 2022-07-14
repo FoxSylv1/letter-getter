@@ -1,18 +1,24 @@
 @import '../_sass/_colors';
 
+#full-title {
+    height: 6rem;
+}
+
 #title {
     color: $orange;
     font-size: 5rem;
 }
-
 @media (max-width: 600px) {
     #title {
         font-size: 4rem;
     }
 }
-
 @media (max-width: 400px) {
     #title {
         font-size: 3rem;
     }
+}
+
+#subtitle {
+    margin-top: -1rem;
 }

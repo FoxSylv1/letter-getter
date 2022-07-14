@@ -1,3 +1,9 @@
+#board-management {
+    width: unquote("min(100%, 700px)");
+    margin: auto;
+
+    min-height: 7.5rem;
+}
 
 .control-button {
     width: unquote("min(30%, 220px)");

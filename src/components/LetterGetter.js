@@ -6,6 +6,7 @@ import BoardManager from './BoardManager';
 import SubmissionList from './SubmissionList';
 import HowTo from './HowTo';
 import { generateBoard } from '../utilities/generateBoard.js';
+import { dailySeed } from '../utilities/dailySeed.js';
 import { wordToTiles, tilesToWord } from '../utilities/converters.js';
 import { dictionary } from '../data/dictionary.js';
 import { validLetterKeys } from '../data/validLetterKeys.js';
@@ -46,7 +47,7 @@ function clickTile(board, tileIndex, currentTiles, setCurrentTiles, setCurrentWo
         updateTiles(board, currentTiles.concat(tileIndex), setCurrentTiles, setCurrentWord);
     }
 }
-function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList) {
+function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, setIsDaily) {
     var key = rawKey.toUpperCase();
     if (validLetterKeys.includes(key)) {
         if (currentWord.charAt(currentWord.length - 1) === "Q" && key === "U") {
@@ -61,6 +62,7 @@ function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentT
         submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList);
     }
     else if (key === "CONTROL") {
+        setIsDaily(false);
         resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
     }
 }
@@ -68,11 +70,23 @@ function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentT
 
 
 //Board Management
+function switchModes(isDaily, setIsDaily, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
+    if (isDaily) {
+        resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+    }
+    else {
+        resetBoard(generateBoard(dailySeed()), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+    }
+    setIsDaily(!isDaily);
+}
 function resetBoard(board, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
     setBoard(board);
     setCurrentTiles([]);
     setCurrentWord("");
     setSubmissionList([]);
+}
+function setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
+    resetBoard(["W", "I", "P"], setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
 }
 function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList) {
     var newSubmission = {word: currentWord, score: wordScore(currentWord)};
@@ -89,10 +103,11 @@ function LetterGetter() {
     var [currentTiles, setCurrentTiles] = useState([]);
     var [currentWord, setCurrentWord] = useState("");
     var [submissionList, setSubmissionList] = useState([]);
-    var [board, setBoard] = useState(generateBoard());
+    var [board, setBoard] = useState(generateBoard(dailySeed()));
+    var [isDaily, setIsDaily] = useState(true);
 
     useEffect(() => {
-        var keyHandler = (e) => pressKey(e.key, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList);
+        var keyHandler = (e) => pressKey(e.key, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, setIsDaily);
         window.addEventListener("keydown", keyHandler, false);
         return (() => {
             window.removeEventListener("keydown", keyHandler, false);});
@@ -102,7 +117,7 @@ function LetterGetter() {
     return (
         <div id="LetterGetter">
             <div id="title-container">
-                <Title>
+                <Title isDaily={isDaily}>
                     Letter Getter
                 </Title>
             </div>
@@ -121,7 +136,11 @@ function LetterGetter() {
             <div id="board-management-container">
                <BoardManager undoTile={() => updateTiles(board, currentTiles.slice(0, -1), setCurrentTiles, setCurrentWord)}
                              submitSubmission={() => submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList)}
-                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}/> 
+                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
+                             switchModes={() => switchModes(isDaily, setIsDaily, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
+                             setCustomBoard={() => setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
+                             isDaily={isDaily}
+                /> 
             </div>
             <div id="submission-list-container">
                 <SubmissionList submissionList={submissionList} />

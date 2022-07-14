@@ -1,8 +1,28 @@
 import { tileGenerationData } from '../data/tileGenerationData.js';
-import { randomInt } from './randomInt.js';
 
 
 const DEFAULT_TILE_COUNT = 16;
+
+
+
+/* A seedable pseudo-random number generator. Credit: 
+https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript */
+function mulberry32(a) {
+    return function() {
+      var t = (a += 0x6D2B79F5);
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    }
+}
+function randomInt(min, max, rng) {
+    return Math.floor((rng() * (max - min)) + min);
+}
+
+function randomSeed() {
+    return Math.floor(Math.random() * 4294967296);
+}
+
 
 
 function isLegalBoard(board) {
@@ -19,11 +39,12 @@ function isLegalBoard(board) {
     return true;
 }
 
-function generateTile() {
+
+function generateTile(rng) {
     var totalProb = 0;
     tileGenerationData.forEach((tileinfo) => totalProb += tileinfo.probability);
     
-    var tileProbCount = randomInt(0, totalProb);
+    var tileProbCount = randomInt(0, totalProb, rng);
     for (var tileinfo of tileGenerationData) {
         if ((tileProbCount -= tileinfo.probability) < 0) {
             return tileinfo.value;
@@ -33,12 +54,13 @@ function generateTile() {
     return "?"; //Error
 }
 
-export function generateBoard(requiredTiles = [], tileCount = DEFAULT_TILE_COUNT) {
-    var board = requiredTiles.slice();
+export function generateBoard(seed = randomSeed()) {
+    var board = [];
+    var rng = mulberry32(seed);
 
     do {
-        for (var i = requiredTiles.length; i < tileCount; ++i) {
-            board[i] = generateTile();
+        for (var i = 0; i < DEFAULT_TILE_COUNT; ++i) { 
+            board[i] = generateTile(rng);
         }
     } while (!isLegalBoard(board));
 
