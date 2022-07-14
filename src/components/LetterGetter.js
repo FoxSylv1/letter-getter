@@ -11,6 +11,7 @@ import { wordToTiles, tilesToWord } from '../utilities/converters.js';
 import { dictionary } from '../data/dictionary.js';
 import { validLetterKeys } from '../data/validLetterKeys.js';
 import { wordScore } from '../utilities/wordScore.js';
+import { getStoredSubmissionList, setStoredSubmissionList } from '../utilities/storageHandlers.js';
 import './LetterGetter.scss';
 
 /*
@@ -25,7 +26,7 @@ the default React set functions automatically keeps the other up-to-date.
 */
 
 
-//Dual updaters
+//Full updaters
 function updateTiles(board, newTiles, setCurrentTiles, setCurrentWord) {
     setCurrentTiles(newTiles);
     setCurrentWord(tilesToWord(board, newTiles));
@@ -60,7 +61,7 @@ function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentT
         updateWord(board, currentWord.slice(0, -1), setCurrentWord, setCurrentTiles);
     }
     else if (key === "ENTER") {
-        submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList);
+        submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily);
     }
     else if (key === "CONTROL") {
         if (!isDaily) {
@@ -86,6 +87,7 @@ function switchModes(isDaily, setIsDaily, setBoard, setCurrentTiles, setCurrentW
     }
     else {
         resetBoard(generateBoard(dailySeed()), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+        setSubmissionList(getStoredSubmissionList());
     }
     setIsDaily(!isDaily);
 }
@@ -110,11 +112,14 @@ function setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmission
         }
     }
 }
-function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList) {
+function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily) {
     var newSubmission = {word: currentWord, score: wordScore(currentWord)};
     if ((!submissionList.map((submission) => submission.word).includes(currentWord)) && dictionary.includes(currentWord.toLowerCase()) && !currentTiles.includes(-1)) {
-        var newSubmissionList = submissionList.concat(newSubmission);
-        setSubmissionList(newSubmissionList.sort((s1, s2) => s2.score - s1.score));
+        var newSubmissionList = submissionList.concat(newSubmission).sort((s1, s2) => s2.score - s1.score);
+        setSubmissionList(newSubmissionList);
+        if (isDaily) {
+            setStoredSubmissionList(newSubmissionList);
+        }
     }
     updateWord(board, "", setCurrentWord, setCurrentTiles);
 }
@@ -124,7 +129,7 @@ function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setC
 function LetterGetter() {
     var [currentTiles, setCurrentTiles] = useState([]);
     var [currentWord, setCurrentWord] = useState("");
-    var [submissionList, setSubmissionList] = useState([]);
+    var [submissionList, setSubmissionList] = useState(getStoredSubmissionList());
     var [board, setBoard] = useState(generateBoard(dailySeed()));
     var [isDaily, setIsDaily] = useState(true);
 
@@ -157,7 +162,7 @@ function LetterGetter() {
             </div>
             <div id="board-management-container">
                <BoardManager undoTile={() => updateTiles(board, currentTiles.slice(0, -1), setCurrentTiles, setCurrentWord)}
-                             submitSubmission={() => submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList)}
+                             submitSubmission={() => submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily)}
                              scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
                              switchModes={() => switchModes(isDaily, setIsDaily, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
                              setCustomBoard={() => setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
