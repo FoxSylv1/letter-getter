@@ -133,7 +133,7 @@ function LetterGetter() {
         window.addEventListener("keydown", keyHandler, false);
         return (() => {
             window.removeEventListener("keydown", keyHandler, false);});
-    }, [board, currentWord, currentTiles, submissionList]);
+    }, [board, currentWord, currentTiles, submissionList, isDaily]);
 
 
     return (
