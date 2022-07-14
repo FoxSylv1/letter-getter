@@ -50,7 +50,6 @@ function clickTile(board, tileIndex, currentTiles, setCurrentTiles, setCurrentWo
 }
 function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily, setIsDaily) {
     var key = rawKey.toUpperCase();
-    console.log(key);
     if (validLetterKeys.includes(key)) {
         if (currentWord.charAt(currentWord.length - 1) === "Q" && key === "U") {
             key = "u";
