@@ -1,9 +1,10 @@
 import Submission from './Submission';
+import { tilesToWord } from '../utilities/converters.js';
 import './SubmissionList.scss';
 
 function SubmissionList(props) {
     var submissions = props.submissionList.map((submission) =>
-        <Submission key={submission.word}
+        <Submission key={tilesToWord(props.board, submission.tiles)}
                     submission={submission}
                     board={props.board}
                     isDaily={props.isDaily}

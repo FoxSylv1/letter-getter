@@ -1,10 +1,9 @@
-import { wordToTiles } from '../utilities/converters.js';
+import { tilesToWord } from '../utilities/converters.js';
 import './Submission.scss';
 
-function copyToClipboard(board, word, score, isDaily) {
-    var tilesUsed = wordToTiles(board, word);
-
+function copyToClipboard(board, tilesUsed, score, isDaily) {
     var clip = "";
+    
     if (isDaily) {
         var timeElapsed = (new Date() - new Date(Date.UTC(2022, 6, 13, 0, 0, 0, 0)));
         clip = clip.concat("Puzzle " + Math.floor(timeElapsed / 86400000));
@@ -31,9 +30,9 @@ function copyToClipboard(board, word, score, isDaily) {
    Not to be confused with the CurrentSubmission. */
 function Submission(props) {
     return (
-        <button class="submission" onClick={() => copyToClipboard(props.board, props.submission.word, props.submission.score, props.isDaily)}>
+        <button class="submission" onClick={() => copyToClipboard(props.board, props.submission.tiles, props.submission.score, props.isDaily)}>
             <div class="submission-word">
-                {props.submission.word}
+                {tilesToWord(props.board, props.submission.tiles)}
             </div>
             <div class="submission-score">
                 {props.submission.score}

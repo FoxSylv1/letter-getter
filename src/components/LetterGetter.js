@@ -112,8 +112,9 @@ function setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmission
     }
 }
 function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily) {
-    var newSubmission = {word: currentWord, score: wordScore(currentWord)};
-    if ((!submissionList.map((submission) => submission.word).includes(currentWord)) && dictionary.includes(currentWord.toLowerCase()) && !currentTiles.includes(-1)) {
+    var newSubmission = {tiles: currentTiles, score: wordScore(currentWord)};
+    if ((!submissionList.map((submission) => tilesToWord(board, submission.tiles)).includes(currentWord)) &&
+                dictionary.includes(currentWord.toLowerCase()) && !currentTiles.includes(-1)) {
         var newSubmissionList = submissionList.concat(newSubmission).sort((s1, s2) => s2.score - s1.score);
         setSubmissionList(newSubmissionList);
         if (isDaily) {
