@@ -1,4 +1,5 @@
 import { tileGenerationData } from '../data/tileGenerationData.js';
+import { getShuffle } from '../utilities/storageHandlers.js';
 
 
 const DEFAULT_TILE_COUNT = 16;
@@ -58,11 +59,18 @@ export function generateBoard(seed = randomSeed()) {
     var board = [];
     var rng = mulberry32(seed);
 
+    //Get legal board
     do {
         for (var i = 0; i < DEFAULT_TILE_COUNT; ++i) { 
             board[i] = generateTile(rng);
         }
     } while (!isLegalBoard(board));
+
+    //Shuffle board (consistently)
+    var shuffle = getShuffle();
+    for (var j = 0; j < shuffle.length - 1; ++j) {
+        [board[j], board[shuffle[j]]] = [board[shuffle[j]], board[j]];
+    }
 
     return board;
 }

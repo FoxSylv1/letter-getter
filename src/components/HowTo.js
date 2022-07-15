@@ -13,7 +13,8 @@ function HowTo(props) {
                 type to input letters for submissions. You can submit as many
                 times you would like for any given board.
                 <br /> <br />
-                There is a new daily puzzle every 24 hours. Try to beat your
+                There is a new daily puzzle every 24 hours. Share your score by
+                clicking on a word in the submission list. Try to beat your
                 friends!
             </p>
 
