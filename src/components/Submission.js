@@ -22,6 +22,7 @@ function copyToClipboard(board, tilesUsed, score, isDaily) {
 
     clip = clip.concat("\n<https://foxsylv1.github.io/letter-getter>");
 
+    alert("Copy and Paste to Share!\n\n" + clip);
     navigator.clipboard.writeText(clip);
 }
 
