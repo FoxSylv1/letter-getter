@@ -5,6 +5,8 @@ function SubmissionList(props) {
     var submissions = props.submissionList.map((submission) =>
         <Submission key={submission.word}
                     submission={submission}
+                    board={props.board}
+                    isDaily={props.isDaily}
         />
     );
 

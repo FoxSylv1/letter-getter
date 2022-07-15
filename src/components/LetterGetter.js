@@ -169,7 +169,10 @@ function LetterGetter() {
                 /> 
             </div>
             <div id="submission-list-container">
-                <SubmissionList submissionList={submissionList} />
+                <SubmissionList submissionList={submissionList}
+                                board={board}
+                                isDaily={isDaily}
+                />
             </div>
             <div>
                 <HowTo />

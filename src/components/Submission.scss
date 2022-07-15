@@ -1,11 +1,21 @@
+@import "../_sass/_colors";
+
 .submission {
     font-size: 2.3rem;
+    color: $beige;
 
     border: 0.5px solid rgba(100,70,30,10);
     border-radius: 3px;
     padding: 2px;
     padding-left: 10px;
     padding-right: 10px;
+
+    background-color: inherit;
+
+    &:hover {
+        background-color: $grey;
+        cursor: pointer;
+    }
 }
 @media (max-width: 600px) {
     .submission {
