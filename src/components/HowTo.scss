@@ -7,6 +7,12 @@
     margin-bottom: 80px;
 }
 
+/* Disable keyboard help on mobile */
+@media (max-width: 500px) {
+    #keyboard-how-to {
+        display: none;
+    }
+}
 #keyboard-shortcuts {
     text-align: left;
 }
