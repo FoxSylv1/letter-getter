@@ -30,10 +30,12 @@ function copyToClipboard(board, tilesUsed, score, isDaily) {
 /* A submission entry in the submission list.
    Not to be confused with the CurrentSubmission. */
 function Submission(props) {
+    var word = tilesToWord(props.board, props.submission.tiles);
+
     return (
         <button class="submission" onClick={() => copyToClipboard(props.board, props.submission.tiles, props.submission.score, props.isDaily)}>
             <div class="submission-word">
-                {tilesToWord(props.board, props.submission.tiles)}
+                {word.slice(0, 20) + (word.length > 20 ? "..." : "")}
             </div>
             <div class="submission-score">
                 {props.submission.score}
