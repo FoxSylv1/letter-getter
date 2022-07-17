@@ -1,18 +1,10 @@
+import { randomSeed } from './randomSeed.js';
+
+
 function currentDay() {
     var today = new Date();
     return today.getUTCDate() + " " + today.getUTCMonth() + " " + today.getUTCFullYear();
 }
-
-
-function newShuffle() {
-    var shuffle = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-    for (var i = 0; i < shuffle.length; ++i) {
-        var j = Math.floor(Math.random() * (i + 1));
-        [shuffle[i], shuffle[j]] = [shuffle[j], shuffle[i]];
-    }
-    return shuffle;
-}
-
 
 
 export function getStoredSubmissionList() {
@@ -27,12 +19,12 @@ export function setStoredSubmissionList(submissionList) {
 }
 
 
-export function getShuffle() {
-    var shuffle = localStorage.getItem("shuffleOrder");
-    if (shuffle === null) {
-        shuffle = newShuffle();
-        localStorage.setItem("shuffleOrder", JSON.stringify(shuffle));
+export function getUserUUID() {
+    var uuid = localStorage.getItem("uuid");
+    if (uuid === null) {
+        var newUUID = randomSeed();
+        localStorage.setItem("uuid", newUUID);
+        return newUUID;
     }
-    return JSON.parse(shuffle);
+    return uuid;
 }
-

@@ -64,7 +64,7 @@ function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentT
     }
     else if (key === "CONTROL") {
         if (!isDaily) {
-            resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+            resetBoard(generateBoard({}), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
         }
     }
     else if (key === "CAPSLOCK") {
@@ -82,35 +82,45 @@ function pressKey(rawKey, board, setBoard, currentWord, setCurrentWord, currentT
 //Board Management
 function switchModes(isDaily, setIsDaily, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
     if (isDaily) {
-        resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+        resetBoard(generateBoard({}), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
     }
     else {
-        resetBoard(generateBoard(dailySeed()), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
+        resetBoard(generateBoard({seed: dailySeed()}), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
         setSubmissionList(getStoredSubmissionList());
     }
     setIsDaily(!isDaily);
 }
+
 function resetBoard(board, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
     setBoard(board);
     setCurrentTiles([]);
     setCurrentWord("");
     setSubmissionList([]);
 }
+
 function setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmissionList) {
-    var input = prompt("Please input your desired board:").toUpperCase();
-    if (input !== null) {
-        var newBoard = [];
-        for (var c = 0; c < input.length; ++c) {
-            var tile = input.charAt(c);
-            if (validLetterKeys.includes(tile) && !(newBoard[newBoard.length - 1] === "Qu" && tile === "U")) {
-                newBoard = newBoard.concat(tile === "Q" ? "Qu" : tile);
+    var input = prompt("Please input your desired board.\nEnter '?' for a random tile:");
+    if (input !== null && input.length > 0) {
+        //Separate ? Inputs
+        var letterGroups = input.toUpperCase().split("?");
+        var numRandomTiles = letterGroups.length - 1;
+        var letterInput = letterGroups.flat().join("");
+
+        //Change into tiles
+        var requiredTiles = [];
+        for (var c = 0; c < letterInput.length; ++c) {
+            var tile = letterInput.charAt(c);
+            if (validLetterKeys.includes(tile) && !(requiredTiles[requiredTiles.length - 1] === "Qu" && tile === "U")) {
+                requiredTiles = requiredTiles.concat(tile === "Q" ? "Qu" : tile);
             }
         }
-        if (newBoard.length > 0) {
-            resetBoard(newBoard, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
-        }
+        
+        //Update board
+        var newBoard = generateBoard({requiredTiles: requiredTiles, tileCount: numRandomTiles + requiredTiles.length});
+        resetBoard(newBoard, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList);
     }
 }
+
 function submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily) {
     var newSubmission = {tiles: currentTiles, score: wordScore(currentWord)};
     if ((!submissionList.map((submission) => tilesToWord(board, submission.tiles)).includes(currentWord)) &&
@@ -130,7 +140,7 @@ function LetterGetter() {
     var [currentTiles, setCurrentTiles] = useState([]);
     var [currentWord, setCurrentWord] = useState("");
     var [submissionList, setSubmissionList] = useState(getStoredSubmissionList());
-    var [board, setBoard] = useState(generateBoard(dailySeed()));
+    var [board, setBoard] = useState(generateBoard({seed: dailySeed()}));
     var [isDaily, setIsDaily] = useState(true);
 
     useEffect(() => {
@@ -163,7 +173,7 @@ function LetterGetter() {
             <div id="board-management-container">
                <BoardManager undoTile={() => updateTiles(board, currentTiles.slice(0, -1), setCurrentTiles, setCurrentWord)}
                              submitSubmission={() => submitSubmission(board, currentWord, setCurrentWord, currentTiles, setCurrentTiles, submissionList, setSubmissionList, isDaily)}
-                             scrambleBoard={() => resetBoard(generateBoard(), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
+                             scrambleBoard={() => resetBoard(generateBoard({}), setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
                              switchModes={() => switchModes(isDaily, setIsDaily, setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
                              setCustomBoard={() => setCustomBoard(setBoard, setCurrentTiles, setCurrentWord, setSubmissionList)}
                              isDaily={isDaily}

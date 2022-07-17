@@ -1,28 +1,13 @@
 import { tileGenerationData } from '../data/tileGenerationData.js';
-import { getShuffle } from '../utilities/storageHandlers.js';
+import { mulberry32 } from './mulberry32.js';
+import { randomInt } from './randomInt.js';
+import { randomSeed } from './randomSeed.js';
+import { shuffle } from './shuffle.js';
+import { getUserUUID } from './storageHandlers.js';
 
 
 const DEFAULT_TILE_COUNT = 16;
-
-
-
-/* A seedable pseudo-random number generator. Credit: 
-https://stackoverflow.com/questions/521295/seeding-the-random-number-generator-in-javascript */
-function mulberry32(a) {
-    return function() {
-      var t = (a += 0x6D2B79F5);
-      t = Math.imul(t ^ (t >>> 15), t | 1);
-      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    }
-}
-function randomInt(min, max, rng) {
-    return Math.floor((rng() * (max - min)) + min);
-}
-
-function randomSeed() {
-    return Math.floor(Math.random() * 4294967296);
-}
+const MAX_GEN_ATTEMPTS = 10;
 
 
 
@@ -55,22 +40,24 @@ function generateTile(rng) {
     return "?"; //Error
 }
 
-export function generateBoard(seed = randomSeed()) {
-    var board = [];
+export function generateBoard(args) {
+    //For overloading
+    var seed = args.seed === undefined ? randomSeed() : args.seed;
+    var requiredTiles = args.requiredTiles === undefined ? [] : args.requiredTiles;
+    var tileCount = args.tileCount === undefined ? DEFAULT_TILE_COUNT : args.tileCount;
+
+
+    var board = requiredTiles.slice();
     var rng = mulberry32(seed);
 
-    //Get legal board
+    //Get (hopefully) legal board
+    var genAttempts = 0;
     do {
-        for (var i = 0; i < DEFAULT_TILE_COUNT; ++i) { 
+        for (var i = requiredTiles.length; i < tileCount; ++i) { 
             board[i] = generateTile(rng);
         }
-    } while (!isLegalBoard(board));
+    } while (!isLegalBoard(board) && (++genAttempts) < MAX_GEN_ATTEMPTS);
 
-    //Shuffle board (consistently)
-    var shuffle = getShuffle();
-    for (var j = 0; j < shuffle.length - 1; ++j) {
-        [board[j], board[shuffle[j]]] = [board[shuffle[j]], board[j]];
-    }
-
-    return board;
+    //Shuffle board
+    return shuffle(getUserUUID(), board);
 }
