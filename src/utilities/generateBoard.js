@@ -59,5 +59,8 @@ export function generateBoard(args) {
     } while (!isLegalBoard(board) && (++genAttempts) < MAX_GEN_ATTEMPTS);
 
     //Shuffle board
+    /* For some reason, the first shuffle on page reload is not calculated correctly.
+       This exhausts the bad shuffle. I don't know why this happens, but this fix works. */
+    shuffle(getUserUUID(), board);
     return shuffle(getUserUUID(), board);
 }

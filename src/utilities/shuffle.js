@@ -3,7 +3,6 @@ import { randomInt } from './randomInt.js';
 
 
 export function shuffle(seed, list) {
-    console.log(list);
     var rng = mulberry32(seed);
     var shuffledList = list.slice();
 
