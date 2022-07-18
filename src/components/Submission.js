@@ -13,6 +13,8 @@ function copyToClipboard(board, tilesUsed, score, isDaily) {
     }
     clip = clip.concat(": " + score + "pts");
 
+    clip = clip.concat("\n||" + tilesToWord(board, tilesUsed) + "||");
+
     for (var i = 0; i < board.length; ++i) {
         if (i % 4 === 0) {
             clip = clip.concat("\n");
